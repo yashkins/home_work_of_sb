@@ -8,7 +8,6 @@ import os
 def create_schedule(path_timetable):
     timetable = pd.read_excel(path_timetable)
     timetable = timetable.iloc[19:38]
-    print(timetable)
     schedule ={}
     month = 12
     year = 2022
@@ -41,21 +40,24 @@ def save_report(labels, values, name):
     result_to_excel.to_excel(f'{name}.xlsx')
     
 
-schedule = create_schedule('Книга1.xlsx')
-list_losses = create_losses('Книга2.xlsx')
+schedule = create_schedule('Книга2.xlsx')
+list_losses = create_losses('Книга1.xlsx')
 
 connect = create_connection('db_for_sb.db')
 [execute_query(connect, query) for query in (query_create_emp, query_create_jd, query_create_loss)]
 insert_employees(connect, query_insert_emp, schedule)
-isert_Job_Days(connect, query_insert_jd, schedule)
+insert_Job_Days(connect, query_insert_jd, schedule)
 insert_losses(connect, query_insert_loss, list_losses)
 
-for query, name in ((query_select_result, report), (query_select_result_distinct, report_distinct)):
-    column_names, values = execute_read_query(connect, query_select_result)
+for query, name in ((query_select_result, 'report'), (query_select_result_distinct, 'report_distinct')):
+    column_names, values = execute_read_query(connect, query)
     save_report(column_names, values, name)
 
-
+[execute_query(connect, query) for query in (query_drop_emp, query_drop_jd, query_drop_loss)]
 connect.close()
+
+print('Отчет успешно сохранен')
+
 
 
 

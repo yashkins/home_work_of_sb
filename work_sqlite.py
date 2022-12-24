@@ -119,7 +119,10 @@ query_select_result_distinct = """SELECT name as ФИО, COUNT(DISTINCT jd.date)
         INNER JOIN Losses as loss ON jd.date = loss.date
         GROUP BY name"""
 
+query_drop_emp = """DROP TABLE Employees"""
 
+query_drop_jd = """DROP TABLE Job_Deys"""
 
+query_drop_loss = """DROP TABLE Losses"""
 
 

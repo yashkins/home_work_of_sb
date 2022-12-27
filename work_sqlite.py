@@ -109,14 +109,14 @@ query_insert_loss = """INSERT INTO Losses(date, emount) VALUES (?,?)"""
 
 query_select_empid = """SELECT id FROM Employees WHERE name = ?"""
 
-query_select_result = """SELECT name as ФИО, COUNT(jd.date) as Колличество 
+query_select_result = """SELECT name as ФИО, COUNT(loss.date) as Колличество 
         FROM Employees as emp INNER JOIN Job_Deys as jd ON emp.id = jd.emp_id
-        INNER JOIN Losses as loss ON jd.date = loss.date
+        LEFT JOIN Losses as loss ON jd.date = loss.date
         GROUP BY name"""
 
-query_select_result_distinct = """SELECT name as ФИО, COUNT(DISTINCT jd.date) as Колличество 
+query_select_result_distinct = """SELECT name as ФИО, COUNT(DISTINCT loss.date) as Колличество 
         FROM Employees as emp INNER JOIN Job_Deys as jd ON emp.id = jd.emp_id
-        INNER JOIN Losses as loss ON jd.date = loss.date
+        LEFT JOIN Losses as loss ON jd.date = loss.date
         GROUP BY name"""
 
 query_drop_emp = """DROP TABLE Employees"""
